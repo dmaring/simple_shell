@@ -30,11 +30,12 @@ int main(int argc, char *argv[], char *env[])
 			perror("Getline failed");
 			continue;
 		}
+
+		rm_nl(&lineptr);
 		arv[0] = lineptr;
 		arv[1] = NULL;
 
 		childpid = fork();
-
 
 		if (childpid == -1)
 		{
@@ -43,6 +44,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 		if (childpid == 0)
 		{
+			printf("%s", arv[0]);
 			execve(arv[0], arv, environ);
 		}
 		else
