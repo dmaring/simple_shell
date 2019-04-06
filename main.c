@@ -30,7 +30,7 @@ int main(int argc, char *argv[], char *env[])
 			perror("Getline failed");
 			continue;
 		}
-		arv[0] = *lineptr;
+		arv[0] = lineptr;
 		arv[1] = NULL;
 
 		childpid = fork();
