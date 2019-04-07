@@ -1,6 +1,58 @@
 #include "shell.h"
 
 /**
+ * word_count - counts words because split_line is bad at arithmetic
+ * @s: string to count
+ * Return: number of words
+ */
+
+int word_count(char *s)
+{
+	int i;
+	int count = 0;
+
+	for (i = 0; s[i] != '\0'; i++)
+	{
+		if (s[i] != ' ')
+			count++;
+	}
+	return (count);
+}
+
+/**
+ * split_line - tokenizes input string at spaces
+ * @line: string to split
+ * Return: pointer to array of split strings
+ */
+
+char **split_line(char *line)
+{
+	int i = 0;
+	int bufsize = word_count(line);
+	char *separator = " ";
+	char *token;
+	char **words = malloc(sizeof(char *) * (bufsize + 1));
+
+	if (!bufsize)
+		free(line);
+		return (NULL);
+
+	if (!words)
+		free(line);
+		return (NULL);
+
+	token = strtok(line, separator);
+	while (token)
+	{
+		words[i] = token;
+		i++;
+		token = strtok(NULL, separator);
+	}
+	words[i] = NULL;
+	return (words);
+}
+
+/**
  * str_concat - concatenates two strings
  * @s1: string 1
  * @s2: string 2
