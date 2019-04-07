@@ -10,6 +10,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+extern char **environ;
+
 char *_itoa(int n, char *s);
 char *read_line(void);
 char **split_line(char *line);
@@ -25,6 +27,9 @@ int _putchar(char c);
 int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
 
+void _env(void);
 void _loop(void);
+void _puts(char *s);
+void rm_nl(char **s);
 
 #endif /*__SHELL_H__*/
