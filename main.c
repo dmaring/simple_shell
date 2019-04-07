@@ -1,21 +1,22 @@
 #include "shell.h"
 
-/**	
+/*
  * main - entrypoint to simple_shell
  *
  * Return: 0 on success
  */
-
 int main(int argc, char *argv[], char *env[])
 {
 	pid_t childpid;
 	size_t n = 0;
 	char *lineptr = NULL;
-	char *arv[2];
 	char **command;
 	char *const environ[] = {NULL};
 	int gl;
 	int status, x;
+	char *arv[2];
+	char *const environ[] = {NULL};
+	
 	(void)argc;
 	(void)argv;
 	(void)env;
@@ -50,6 +51,12 @@ int main(int argc, char *argv[], char *env[])
 		}
 		rm_nl(&lineptr);
 		
+		if (lineptr == NULL)
+		{
+			perror("Getline failed");
+			continue;
+		}
+
 		arv[0] = lineptr;
 		arv[1] = NULL;
 

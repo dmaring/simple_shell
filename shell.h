@@ -29,7 +29,10 @@ int _strcmp(char *s1, char *s2);
 
 void _env(void);
 void _loop(void);
+<<<<<<< HEAD
 void _puts(char *s);
+=======
+>>>>>>> 1b0a7e3a0b4d1511fdf2be45177f970f2ebe8eee
 void rm_nl(char **s);
 
 #endif /*__SHELL_H__*/
