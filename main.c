@@ -1,6 +1,6 @@
 #include "shell.h"
 
-/*
+/**	
  * main - entrypoint to simple_shell
  *
  * Return: 0 on success
@@ -9,11 +9,13 @@ int main(int argc, char *argv[], char *env[])
 {
 	pid_t childpid;
 	size_t n = 0;
-	int  status;
 	char *lineptr = NULL;
 	char *arv[2];
+	char **command;
 	char *const environ[] = {NULL};
 	int gl;
+
+	int status, x;
 
 	(void)argc;
 	(void)argv;
@@ -21,7 +23,7 @@ int main(int argc, char *argv[], char *env[])
 
 	while (1)
 	{
-		_puts("$ ");
+		write(STDERR_FILENO, "$ ", 2);
 
 		gl = getline(&lineptr, &n, stdin);
 		if (gl < 0)
@@ -30,6 +32,18 @@ int main(int argc, char *argv[], char *env[])
 			return (0);
 		}
 
+//		command = split_line(lineptr);
+//		if (!command[0])
+//		{
+//			free(lineptr);
+//			free(command);
+//			continue;
+//		}
+
+		if (_strcmp(lineptr, "exit\n") == 0)
+		{
+				exit(0);
+		}
 		if (_strcmp(lineptr, "env\n") == 0)
 		{
 			_env();
@@ -37,6 +51,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 
 		rm_nl(&lineptr);
+
 		arv[0] = lineptr;
 		arv[1] = NULL;
 
@@ -48,8 +63,11 @@ int main(int argc, char *argv[], char *env[])
 		}
 		if (childpid == 0)
 		{
-			execve(arv[0], arv, NULL);
-
+			if (execve(arv[0], arv, NULL) < 0)
+			{
+				perror(arv[0]);
+				exit(1);
+			}
 		}
 		else
 		{

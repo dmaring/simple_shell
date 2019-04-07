@@ -20,7 +20,7 @@ char *_strdup(char *s);
 char *_strstr(char *haystack, char *needle);
 
 int _atoi(char *s);
-int _cd(char **args);
+int _cd(char *path);
 int _help(char **args);
 int _launch(char **args);
 int _putchar(char c);
