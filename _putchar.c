@@ -13,10 +13,23 @@ int _putchar(char c)
 }
 
 /**
+ * _puts - prints a string
+ * @s: string to print
+ * Return: void
+ */
+void _puts(char *s)
+{
+	while (*s)
+	{
+		_putchar(*s);
+		s++;
+	}
+}
+
+/**
  * _env - prints the current environment
  * Return: void
  */
-
 void _env(void)
 {
 	int i = 0;
@@ -33,7 +46,6 @@ void _env(void)
  * _error - prints error
  * @av: argument
  */
-
 void _error(char **av)
 {
 	write(STDERR_FILENO, av[0], _strlen(av[0]));
