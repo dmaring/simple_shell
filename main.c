@@ -13,6 +13,7 @@ int main(int argc, char *argv[], char *env[])
 	char *lineptr = NULL;
 	char *arv[2];
 	char *const environ[] = {NULL};
+	int gl;
 
 	(void)argc;
 	(void)argv;
@@ -20,14 +21,18 @@ int main(int argc, char *argv[], char *env[])
 
 	while (1)
 	{
-		_putchar('$');
-		_putchar(' ');
+		_puts("$ ");
 
-		getline(&lineptr, &n, stdin);
-
-		if (lineptr == NULL)
+		gl = getline(&lineptr, &n, stdin);
+		if (gl < 0)
 		{
-			perror("Getline failed");
+			_putchar('\n');
+			return (0);
+		}
+
+		if (_strcmp(lineptr, "env\n") == 0)
+		{
+			_env();
 			continue;
 		}
 
@@ -36,16 +41,15 @@ int main(int argc, char *argv[], char *env[])
 		arv[1] = NULL;
 
 		childpid = fork();
-
 		if (childpid == -1)
 		{
 			perror("Child process failed.");
-			continue;
+			exit(1);
 		}
 		if (childpid == 0)
 		{
-			printf("%s", arv[0]);
-			execve(arv[0], arv, environ);
+			execve(arv[0], arv, NULL);
+
 		}
 		else
 		{
