@@ -12,7 +12,6 @@ int main(int argc, char *argv[], char *env[])
 	size_t n = 0;
 	char *lineptr = NULL;
 	char **command;
-	char buffer[10];
 	int gl;
 
 	int status;
@@ -46,7 +45,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 		if (_strcmp(command[0], "env") == 0)
 		{
-//			_env();
+			_env();
 			continue;
 		}
 
@@ -73,6 +72,9 @@ int main(int argc, char *argv[], char *env[])
 		{
 			wait(&status);
 		}
+
+		free(command);
+		free(lineptr);
 	}
 	return (0);
 }
