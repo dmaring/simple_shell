@@ -35,7 +35,7 @@ char **split_line(char *line)
 
 	rm_nl(&line);
 	bufsize = word_count(line);
-        words = malloc(sizeof(char *) * (bufsize + 1));
+        words = malloc(sizeof(char *) * (bufsize));
 
 	if (!bufsize)
 	{

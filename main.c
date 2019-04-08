@@ -1,5 +1,4 @@
 #include "shell.h"
-#include <errno.h>
 
 /**
  * main - entrypoint to simple_shell
@@ -10,7 +9,7 @@ int main(int argc, char *argv[], char *env[])
 {
 	pid_t childpid;
 	size_t n = 0;
-	char *lineptr = NULL;
+	char *lineptr;
 	char **command;
 	int gl;
 
@@ -24,6 +23,7 @@ int main(int argc, char *argv[], char *env[])
 	{
 		write(STDERR_FILENO, "$ ", 2);
 
+		lineptr = NULL;
 		gl = getline(&lineptr, &n, stdin);
 		if (gl < 0)
 		{
@@ -31,13 +31,14 @@ int main(int argc, char *argv[], char *env[])
 			return (0);
 		}
 
-		command = split_line(lineptr);
-		if (!command[0])
+		/* if string is just a newline character */
+		if (lineptr[0] == '\n')
 		{
 			free(lineptr);
-			free(command);
 			continue;
 		}
+
+		command = split_line(lineptr);
 
 		if (_strcmp(command[0], "exit") == 0)
 		{
@@ -74,7 +75,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 
 		free(command);
-		free(lineptr);
+
 	}
 	return (0);
 }

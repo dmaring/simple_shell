@@ -19,6 +19,7 @@ char **split_line(char *line);
 char *str_concat(char *s1, char *s2);
 char *_strdup(char *s);
 char *_strstr(char *haystack, char *needle);
+char *_which(char *filename);
 
 int _atoi(char *s);
 int _cd(char *path);

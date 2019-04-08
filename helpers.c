@@ -18,6 +18,16 @@ void rm_nl(char **lineptr)
 		i++;
 	ptr[i] = '\0';
 }
+/**
+ * _getenv - get the value of an environment variabl
+ * @key: name of environment variable
+ *
+ * Return: pointer to string value of @key
+ */
+char *_getenv(const char *name)
+{
+	return (char *)name;
+}
 
 /**
  * _which - return absolute path of passed command or script
@@ -33,7 +43,7 @@ char *_which(char *filename)
 	struct stat st;
 
 	filename = str_concat("/", filename);
-	path = getenv("PATH");
+	path = _getenv("PATH");
 
 	token = strtok(path, ":");
 
