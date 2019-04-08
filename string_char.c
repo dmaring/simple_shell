@@ -28,18 +28,26 @@ int word_count(char *s)
 char **split_line(char *line)
 {
 	int i = 0;
-	int bufsize = word_count(line);
+	int bufsize;
 	char *separator = " ";
 	char *token;
-	char **words = malloc(sizeof(char *) * (bufsize + 1));
+	char **words;
+
+	rm_nl(&line);
+	bufsize = word_count(line);
+        words = malloc(sizeof(char *) * (bufsize + 1));
 
 	if (!bufsize)
+	{
 		free(line);
 		return (NULL);
+	}
 
 	if (!words)
+	{
 		free(line);
 		return (NULL);
+	}
 
 	token = strtok(line, separator);
 	while (token)
