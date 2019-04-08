@@ -32,5 +32,6 @@ void _env(void);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);
+void _error(char **av);
 
 #endif /*__SHELL_H__*/

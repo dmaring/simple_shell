@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <errno.h>
 
 extern char **environ;
 
@@ -50,8 +51,20 @@ void _env(void)
  */
 void _error(char **av)
 {
+	char *buffer = malloc(sizeof(char) * 10);
+
 	write(STDERR_FILENO, av[0], _strlen(av[0]));
 	_putchar(':');
 	_putchar(' ');
-	write(STDERR_FILENO, "command not found\n", 18);
+	_puts(_itoa(errno, buffer));
+	free(buffer);
+	_putchar(':');
+	_putchar(' ');
+	if (av[1])
+		{
+			write(STDERR_FILENO, av[1], _strlen(av[1]));
+			_putchar(':');
+			_putchar(' ');
+		}
+	write(STDERR_FILENO, "not found\n", 10);
 }

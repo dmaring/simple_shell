@@ -12,6 +12,7 @@ int main(int argc, char *argv[], char *env[])
 	size_t n = 0;
 	char *lineptr = NULL;
 	char **command;
+	char buffer[10];
 	int gl;
 
 	int status;
@@ -20,7 +21,7 @@ int main(int argc, char *argv[], char *env[])
 	(void)argv;
 	(void)env;
 
-	while (1)
+ 	while (1)
 	{
 		write(STDERR_FILENO, "$ ", 2);
 
@@ -39,13 +40,13 @@ int main(int argc, char *argv[], char *env[])
 			continue;
 		}
 
-		if (_strcmp(command[0], "exit\n") == 0)
+		if (_strcmp(command[0], "exit") == 0)
 		{
 			exit(0);
 		}
-		if (_strcmp(command[0], "env\n") == 0)
+		if (_strcmp(command[0], "env") == 0)
 		{
-			_env();
+//			_env();
 			continue;
 		}
 
@@ -59,11 +60,15 @@ int main(int argc, char *argv[], char *env[])
 		{
 			if (execve(command[0], command, NULL) < 0)
 			{
-				/* make error string */
-				perror("My error string\n");
+				/* check for errno on failure */
+				if (errno == 1 || errno == 2)
+				{
+					_error(command);
+				}
 				exit(1);
 			}
 		}
+
 		else
 		{
 			wait(&status);
