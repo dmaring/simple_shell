@@ -73,6 +73,6 @@ char *_which(char *filename)
 		token = strtok(NULL, ":");
 	}
 
-	return (path);
+	return (fullpath);
 
 }

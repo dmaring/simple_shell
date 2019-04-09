@@ -13,7 +13,6 @@
 
 extern char **environ;
 
-char *_getenv(char *s, char **environ);
 char *_itoa(int n, char *s);
 char *read_line(void);
 char **split_line(char *line);
