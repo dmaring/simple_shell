@@ -9,7 +9,7 @@ int main(int argc, char *argv[], char *env[])
 {
 	pid_t childpid;
 	size_t n = 0;
-	char *lineptr;
+	char *lineptr, *shcmd;
 	char **command;
 	int cmd_count, gl, status;
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[], char *env[])
 	(void)env;
 
 	signal(SIGINT, sigintHandler);
-
+	cmd_count = 0;
  	while (1)
 	{
 		write(STDERR_FILENO, "$ ", 2);
@@ -64,6 +64,8 @@ int main(int argc, char *argv[], char *env[])
 		if (childpid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
+			shcmd = command[0];
+
 			/* _which will get full path of command */
 			command[0] = _which(command[0]);
 			if (execve(command[0], command, NULL) < 0)
@@ -71,7 +73,7 @@ int main(int argc, char *argv[], char *env[])
 				/* check for errno on failure */
 				if (errno == 1 || errno == 2)
 				{
-					_error(argv, command, cmd_count);
+					_error(argv, &shcmd, cmd_count);
 					exit(127);
 				}
 				exit(1);
