@@ -39,9 +39,6 @@ int main(int argc, char *argv[], char *env[])
 		}
 
 		command = split_line(lineptr);
-//		if (!command)
-//			continue;
-
 		if (_strcmp(command[0], "exit") == 0)
 		{
 			if (command[1] == NULL)
@@ -67,7 +64,8 @@ int main(int argc, char *argv[], char *env[])
 			shcmd = command[0];
 
 			/* _which will get full path of command */
-			command[0] = _which(command[0]);
+			if (*command[0] != '/')
+				command[0] = _which(command[0]);
 			if (execve(command[0], command, NULL) < 0)
 			{
 				/* check for errno 2 on failure */
