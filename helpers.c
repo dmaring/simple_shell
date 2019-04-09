@@ -22,11 +22,27 @@ void rm_nl(char **lineptr)
  * _getenv - get the value of an environment variabl
  * @key: name of environment variable
  *
- * Return: pointer to string value of @key
+ * Return: pointer to string value of @key terminated by '\n'
  */
-char *_getenv(const char *name)
+char *_getenv(char *name)
 {
-	return (char *)name;
+	int i = 0;
+
+	while (environ[i])
+	{
+		char *haystack = environ[i];
+
+		while (*haystack == *name)
+		{
+			haystack++;
+			name++;
+		}
+		if (*name == '\0')
+			return (haystack + 1);
+
+		i++;
+	}
+	return (NULL);
 }
 
 /**
