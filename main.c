@@ -14,7 +14,7 @@ int main(int argc, char *argv[], char *env[])
 	int cmd_count, gl, status;
 
 	(void)argc;
-	(void)argv;
+//	(void)argv;
 	(void)env;
 
 	signal(SIGINT, sigintHandler);
@@ -26,9 +26,9 @@ int main(int argc, char *argv[], char *env[])
 		lineptr = NULL;
 		gl = getline(&lineptr, &n, stdin);
 		cmd_count++;
-		if (gl < 0)
+		if (gl == EOF)
 		{
-			_putchar('\n'), exit(0);
+			_putchar('\n'), fflush(NULL), exit(0);
 		}
 
 		/* if string is just a newline character */
@@ -39,8 +39,8 @@ int main(int argc, char *argv[], char *env[])
 		}
 
 		command = split_line(lineptr);
-		if (!command)
-			continue;
+//		if (!command)
+//			continue;
 
 		if (_strcmp(command[0], "exit") == 0)
 		{
@@ -69,7 +69,8 @@ int main(int argc, char *argv[], char *env[])
 				/* check for errno on failure */
 				if (errno == 1 || errno == 2)
 				{
-					_error(command, cmd_count);
+					_error(argv, command, cmd_count);
+					exit(127);
 				}
 				exit(1);
 			}
