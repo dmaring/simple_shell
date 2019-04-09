@@ -34,7 +34,7 @@ void _env(void);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);
-void _error(char **av, int cmd_count);
+void _error(char **prog, char **av, int cmd_count);
 void sigintHandler(int signo);
 
 #endif /*__SHELL_H__*/
