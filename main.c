@@ -1,5 +1,13 @@
 #include "shell.h"
 
+void sigint_handler(int signo);
+
+void sigint_handler(int signo)
+{
+	printf("caught sigint");
+}
+
+
 /**
  * main - entrypoint to simple_shell
  *
@@ -11,14 +19,13 @@ int main(int argc, char *argv[], char *env[])
 	size_t n = 0;
 	char *lineptr;
 	char **command;
-	int gl;
-	int cmd_count;
-
-	int status;
+	int cmd_count, gl, status;
 
 	(void)argc;
 	(void)argv;
 	(void)env;
+
+	signal(SIGINT, SIG_IGN);
 
  	while (1)
 	{
@@ -29,8 +36,7 @@ int main(int argc, char *argv[], char *env[])
 		cmd_count++;
 		if (gl < 0)
 		{
-			perror("getline failed\n");
-			return (0);
+			_putchar('\n'), exit(0);
 		}
 
 		/* if string is just a newline character */
@@ -41,7 +47,6 @@ int main(int argc, char *argv[], char *env[])
 		}
 
 		command = split_line(lineptr);
-
 		if (!command)
 			continue;
 
@@ -66,6 +71,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 		if (childpid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
 			if (execve(command[0], command, NULL) < 0)
 			{
 				/* check for errno on failure */
@@ -76,12 +82,10 @@ int main(int argc, char *argv[], char *env[])
 				exit(1);
 			}
 		}
-
 		else
 		{
 			wait(&status);
 		}
-
 		free(command);
 		free(lineptr);
 	}
