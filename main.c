@@ -70,8 +70,8 @@ int main(int argc, char *argv[], char *env[])
 			command[0] = _which(command[0]);
 			if (execve(command[0], command, NULL) < 0)
 			{
-				/* check for errno on failure */
-				if (errno == 1 || errno == 2)
+				/* check for errno 2 on failure */
+				if (errno == 2)
 				{
 					_error(argv, &shcmd, cmd_count);
 					exit(127);
