@@ -42,7 +42,10 @@ int main(int argc, char *argv[], char *env[])
 
 		if (_strcmp(command[0], "exit") == 0)
 		{
-			exit(0);
+			if (command[1] == NULL)
+				exit(0);
+			else
+				exit(_atoi(command[1]));
 		}
 		if (_strcmp(command[0], "env") == 0)
 		{
@@ -75,7 +78,7 @@ int main(int argc, char *argv[], char *env[])
 		}
 
 		free(command);
-
+		free(lineptr);
 	}
 	return (0);
 }
