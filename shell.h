@@ -33,6 +33,6 @@ void _env(void);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);
-void _error(char **av);
+void _error(char **av, int cmd_count);
 
 #endif /*__SHELL_H__*/

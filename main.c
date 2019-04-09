@@ -12,6 +12,7 @@ int main(int argc, char *argv[], char *env[])
 	char *lineptr;
 	char **command;
 	int gl;
+	int cmd_count;
 
 	int status;
 
@@ -25,6 +26,7 @@ int main(int argc, char *argv[], char *env[])
 
 		lineptr = NULL;
 		gl = getline(&lineptr, &n, stdin);
+		cmd_count++;
 		if (gl < 0)
 		{
 			perror("getline failed\n");
@@ -69,7 +71,7 @@ int main(int argc, char *argv[], char *env[])
 				/* check for errno on failure */
 				if (errno == 1 || errno == 2)
 				{
-					_error(command);
+					_error(command, cmd_count);
 				}
 				exit(1);
 			}

@@ -49,14 +49,14 @@ void _env(void)
  * _error - prints error
  * @av: argument
  */
-void _error(char **av)
+void _error(char **av, int cmd_count)
 {
 	char *buffer = malloc(sizeof(char) * 10);
 
 	write(STDERR_FILENO, av[0], _strlen(av[0]));
 	_putchar(':');
 	_putchar(' ');
-	_puts(_itoa(errno, buffer));
+	_puts(_itoa(cmd_count, buffer));
 	free(buffer);
 	_putchar(':');
 	_putchar(' ');
