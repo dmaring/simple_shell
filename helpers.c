@@ -18,11 +18,12 @@ void rm_nl(char **lineptr)
 		i++;
 	ptr[i] = '\0';
 }
+
 /**
  * _getenv - get the value of an environment variabl
- * @key: name of environment variable
+ * @name: input string
  *
- * Return: pointer to string value of @key terminated by '\n'
+ * Return: pointer to string value of @key
  */
 char *_getenv(char *name)
 {
