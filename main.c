@@ -40,6 +40,9 @@ int main(int argc, char *argv[], char *env[])
 
 		command = split_line(lineptr);
 
+		if (!command)
+			continue;
+
 		if (_strcmp(command[0], "exit") == 0)
 		{
 			if (command[1] == NULL)
