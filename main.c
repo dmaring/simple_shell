@@ -64,6 +64,8 @@ int main(int argc, char *argv[], char *env[])
 		if (childpid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
+			/* _which will get full path of command */
+			command[0] = _which(command[0]);
 			if (execve(command[0], command, NULL) < 0)
 			{
 				/* check for errno on failure */
@@ -95,4 +97,3 @@ void sigintHandler(int signo)
     signal(SIGINT, sigintHandler);
     _puts("\n$ ");
 }
-
