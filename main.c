@@ -1,13 +1,5 @@
 #include "shell.h"
 
-void sigint_handler(int signo);
-
-void sigint_handler(int signo)
-{
-	printf("caught sigint");
-}
-
-
 /**
  * main - entrypoint to simple_shell
  *
@@ -25,7 +17,7 @@ int main(int argc, char *argv[], char *env[])
 	(void)argv;
 	(void)env;
 
-	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, sigintHandler);
 
  	while (1)
 	{
@@ -91,3 +83,16 @@ int main(int argc, char *argv[], char *env[])
 	}
 	return (0);
 }
+
+/**
+ * sigintHandler - handles Ctrl+C
+ * @signo: signal to handle
+ * Return: void
+ */
+
+void sigintHandler(int signo)
+{
+    signal(SIGINT, sigintHandler);
+    _puts("\n$ ");
+}
+
