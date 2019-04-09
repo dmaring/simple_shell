@@ -21,6 +21,7 @@ char *str_concat(char *s1, char *s2);
 char *_strdup(char *s);
 char *_strstr(char *haystack, char *needle);
 char *_which(char *filename);
+char *_getenv(char *name);
 
 int _atoi(char *s);
 int _cd(char *path);

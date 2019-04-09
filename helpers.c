@@ -22,23 +22,26 @@ void rm_nl(char **lineptr)
 /**
  * _getenv - get the value of an environment variabl
  * @name: input string
+ *
  * Return: pointer to string value of @key
  */
-char *_getenv(const char *name)
+char *_getenv(char *name)
 {
-	char **envPtr;
-	char *cPtr; nPtr;
-	int i;
+	int i = 0;
 
-	for (envPtr = environ; *envPtr != NULL; envPtr++)
+	while (environ[i])
 	{
-		for (cPtr = *envPtr, nPtr = name; *cPtr == *nPtr; cPtr++, nPtr++)
+		char *haystack = environ[i];
+
+		while (*haystack == *name)
 		{
-			if (*cPtr == '=')
-				break;
-			if ((*cPtr == '=') && (*nPtr == NULL))
-				return (cPtr + 1);
+			haystack++;
+			name++;
 		}
+		if (*name == '\0')
+			return (haystack + 1);
+
+		i++;
 	}
 	return (NULL);
 }
