@@ -13,6 +13,7 @@
 
 extern char **environ;
 
+char *_getenv(char *s, char **environ);
 char *_itoa(int n, char *s);
 char *read_line(void);
 char **split_line(char *line);
@@ -33,6 +34,6 @@ void _env(void);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);
-void _error(char **av);
+void _error(char **av, int cmd_count);
 
 #endif /*__SHELL_H__*/

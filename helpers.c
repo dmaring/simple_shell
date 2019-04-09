@@ -18,15 +18,29 @@ void rm_nl(char **lineptr)
 		i++;
 	ptr[i] = '\0';
 }
+
 /**
  * _getenv - get the value of an environment variabl
- * @key: name of environment variable
- *
+ * @name: input string
  * Return: pointer to string value of @key
  */
 char *_getenv(const char *name)
 {
-	return (char *)name;
+	char **envPtr;
+	char *cPtr; nPtr;
+	int i;
+
+	for (envPtr = environ; *envPtr != NULL; envPtr++)
+	{
+		for (cPtr = *envPtr, nPtr = name; *cPtr == *nPtr; cPtr++, nPtr++)
+		{
+			if (*cPtr == '=')
+				break;
+			if ((*cPtr == '=') && (*nPtr == NULL))
+				return (cPtr + 1);
+		}
+	}
+	return (NULL);
 }
 
 /**
