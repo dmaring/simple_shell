@@ -31,6 +31,7 @@ int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
 
 void _env(void);
+void _execute(char *argv[], char **command, char *fp, int cmd_count);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);

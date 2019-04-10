@@ -5,30 +5,32 @@
  *
  * Return: 0 on success
  */
-int main(int argc, char *argv[], char *env[])
+void main(int argc, char *argv[], char *env[])
 {
 	pid_t childpid;
 	size_t n = 0;
-	char *lineptr, *shcmd;
+	char *lineptr, *fp = NULL;
 	char **command;
-	int cmd_count, gl, status;
-
+	int gl, cmd_count = 0;
 	(void)argc;
-//	(void)argv;
 	(void)env;
 
 	signal(SIGINT, sigintHandler);
-	cmd_count = 0;
  	while (1)
 	{
-		write(STDERR_FILENO, "$ ", 2);
+		if (isatty(STDIN_FILENO))
+			write(STDERR_FILENO, "$ ", 2);
 
 		lineptr = NULL;
-		gl = getline(&lineptr, &n, stdin);
 		cmd_count++;
-		if (gl == EOF)
+		
+		gl = getline(&lineptr, &n, stdin);
+		if (gl < 0)
 		{
-			_putchar('\n'), fflush(NULL), exit(0);
+			free(lineptr);
+			if (isatty(STDIN_FILENO))
+				_putchar('\n');
+			exit(0);
 		}
 
 		/* if string is just a newline character */
@@ -39,6 +41,9 @@ int main(int argc, char *argv[], char *env[])
 		}
 
 		command = split_line(lineptr);
+		if (command == NULL)
+			continue;
+
 		if (_strcmp(command[0], "exit") == 0)
 		{
 			if (command[1] == NULL)
@@ -51,6 +56,17 @@ int main(int argc, char *argv[], char *env[])
 			_env();
 			continue;
 		}
+
+		fp = _which(command[0]);
+		_execute(argv, command, fp, cmd_count);
+	}
+}
+
+void _execute(char *argv[], char **command, char *fp, int cmd_count)
+{
+		pid_t childpid;
+		int status;
+		char *shcmd;
 
 		childpid = fork();
 		if (childpid == -1)
@@ -65,7 +81,7 @@ int main(int argc, char *argv[], char *env[])
 
 			/* _which will get full path of command */
 			if (*command[0] != '/')
-				command[0] = _which(command[0]);
+				command[0] = fp;
 			if (execve(command[0], command, NULL) < 0)
 			{
 				/* check for errno 2 on failure */
@@ -81,10 +97,6 @@ int main(int argc, char *argv[], char *env[])
 		{
 			wait(&status);
 		}
-		free(command);
-		free(lineptr);
-	}
-	return (0);
 }
 
 /**
