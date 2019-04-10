@@ -5,11 +5,10 @@
  *
  * Return: 0 on success
  */
-void main(int argc, char *argv[], char *env[])
+int main(int argc, char *argv[], char *env[])
 {
-	pid_t childpid;
 	size_t n = 0;
-	char *lineptr, *fp = NULL;
+	char *lineptr;
 	char **command;
 	int gl, cmd_count = 0;
 	(void)argc;
@@ -23,7 +22,7 @@ void main(int argc, char *argv[], char *env[])
 
 		lineptr = NULL;
 		cmd_count++;
-		
+
 		gl = getline(&lineptr, &n, stdin);
 		if (gl < 0)
 		{
@@ -56,13 +55,13 @@ void main(int argc, char *argv[], char *env[])
 			_env();
 			continue;
 		}
-
-		fp = _which(command[0]);
-		_execute(argv, command, fp, cmd_count);
+		/* what is fp for ?? maybe just put all of this in _execute? */
+		_execute(argv, command, cmd_count);
 	}
+	return (0);
 }
 
-void _execute(char *argv[], char **command, char *fp, int cmd_count)
+void _execute(char *argv[], char **command, int cmd_count)
 {
 		pid_t childpid;
 		int status;
@@ -74,14 +73,17 @@ void _execute(char *argv[], char **command, char *fp, int cmd_count)
 			perror("Child process failed.");
 			exit(EXIT_FAILURE);
 		}
+		/* child proccess do this */
 		if (childpid == 0)
 		{
+
 			signal(SIGINT, SIG_DFL);
-			shcmd = command[0];
+
 
 			/* _which will get full path of command */
 			if (*command[0] != '/')
-				command[0] = fp;
+				/* why assign command[0] to fp */
+				command[0] = _which(command[0]);
 			if (execve(command[0], command, NULL) < 0)
 			{
 				/* check for errno 2 on failure */
@@ -108,5 +110,6 @@ void _execute(char *argv[], char **command, char *fp, int cmd_count)
 void sigintHandler(int signo)
 {
     signal(SIGINT, sigintHandler);
+    (void)signo;
     _puts("\n$ ");
 }
