@@ -32,7 +32,7 @@ int main(int argc, char *argv[], char *env[])
 		command = split_line(lineptr);
 		if (_strcmp(command[0], "exit") == 0)
 		{
-			exit_handler(argv, command[1], cmd_count);
+			exit_handler(argv, command, cmd_count);
 			continue;
 		}
 		if (_strcmp(command[0], "env") == 0)
@@ -94,19 +94,21 @@ void _execute(char *argv[], char **command, int cmd_count)
 /**
  * exit_handler - handles exit
  */
-void exit_handler(char **prog, char *command, int cmd_count)
+void exit_handler(char **prog, char **command, int cmd_count)
 {
 	long int a = 0;
+	char *shcmd;
 	
-	if (command == NULL)
+	if (command[1] == NULL)
 	{
 		exit(0);
 	}
-	a = _atoi(command);
+	a = _atoi(command[1]);
+	shcmd = command[0];
 	if (a > 2147483647 || a < 0)
-		_error(prog, &command, cmd_count); 
+		_error(prog, &shcmd, cmd_count); 
 	else	
-		exit(_atoi(command));
+		exit(_atoi(command[1]));
 }
 
 /**
