@@ -32,10 +32,16 @@ int main(int argc, char *argv[], char *env[])
 		}
 		command = split_line(lineptr);
 		if (_strcmp(command[0], "exit") == 0)
+		{
 			exit_handler(command[1]);
+			free(command);
+			free(lineptr);
+		}
 		if (_strcmp(command[0], "env") == 0)
 		{
 			_env();
+			free(command);
+			free(lineptr);
 			continue;
 		}
 		_execute(argv, command, cmd_count);
@@ -80,6 +86,7 @@ void _execute(char *argv[], char **command, int cmd_count)
 				_error(argv, &shcmd, cmd_count);
 				exit(127);
 			}
+			free(command);
 			exit(1);
 		}
 	}

@@ -10,11 +10,17 @@ int word_count(char *s)
 {
 	int i;
 	int count = 0;
+	int state = 0;
 
 	for (i = 0; s[i] != '\0'; i++)
 	{
-		if (s[i] != ' ')
+		if (s[i] == ' ' || s[i] == '\n' || s[i] == '\t')
+			state = 0;
+		else if (state == 0)
+		{
+			state = 1;
 			count++;
+		}
 	}
 	return (count);
 }
@@ -39,13 +45,13 @@ char **split_line(char *line)
 
 	if (!bufsize)
 	{
-		free(line);
+		free(words);
 		return (NULL);
 	}
 
 	if (!words)
 	{
-		free(line);
+		free(words);
 		return (NULL);
 	}
 

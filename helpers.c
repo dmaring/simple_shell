@@ -84,8 +84,10 @@ char *_which(char *filename)
 	{
 		fullpath = str_concat(token, filename);
 		if (stat(fullpath, &st) == 0)
+		{
+			free(filename);
 			return (fullpath);
-
+		}
 		token = strtok(NULL, ":");
 	}
 
