@@ -33,9 +33,10 @@ int main(int argc, char *argv[], char *env[])
 		command = split_line(lineptr);
 		if (_strcmp(command[0], "exit") == 0)
 		{
-			exit_handler(command[1]);
 			free(command);
 			free(lineptr);
+			exit_handler(command[1]);
+
 		}
 		if (_strcmp(command[0], "env") == 0)
 		{
