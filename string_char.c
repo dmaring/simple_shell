@@ -46,13 +46,13 @@ char **split_line(char *line)
 	if (!bufsize)
 	{
 		free(words);
-		return (NULL);
+		exit(errno);
 	}
 
 	if (!words)
 	{
 		free(words);
-		return (NULL);
+		exit(errno);
 	}
 
 	token = strtok(line, separator);

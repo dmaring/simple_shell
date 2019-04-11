@@ -22,21 +22,18 @@ int main(int argc, char *argv[], char *env[])
 		gl = getline(&lineptr, &n, stdin);
 		if (gl < 0)
 		{
-			_putchar('\n');
+			if (isatty(STDIN_FILENO))
+				_putchar('\n');
 			free(lineptr);
 			return (0);
 		}
 		if (lineptr[0] == '\n')
-		{
 			continue;
-		}
 		command = split_line(lineptr);
 		if (_strcmp(command[0], "exit") == 0)
 		{
-			free(command);
-			free(lineptr);
-			exit_handler(command[1]);
-
+			exit_handler(argv, command, cmd_count);
+			continue;
 		}
 		if (_strcmp(command[0], "env") == 0)
 		{
@@ -100,17 +97,21 @@ void _execute(char *argv[], char **command, int cmd_count)
 /**
  * exit_handler - handles exit
  */
-void exit_handler(char *command)
+void exit_handler(char **prog, char **command, int cmd_count)
 {
- 	/* if ((_atoi(command)) > 2147483647 || (_atoi(command)) < 0) */
-	/* 	perror("ERROR"); */
+	long int a = 0;
+	char *shcmd;
 
-	if (command == NULL)
+	if (command[1] == NULL)
 	{
 		exit(0);
 	}
+	a = _atoi(command[1]);
+	shcmd = command[0];
+	if (a > 2147483647 || a < 0)
+		_error(prog, &shcmd, cmd_count);
 	else
-		exit(_atoi(command));
+		exit(_atoi(command[1]));
 }
 
 /**

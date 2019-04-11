@@ -6,15 +6,25 @@
  * Description: copy of atoi
  * Return: converted integer
  */
-
-int _atoi(char *s)
+double _atoi(char *s)
 {
-	int i, n = 0;
+	int i = 0;
+	double n = 0;
 
-	for (i = 0; s[i] >= '0' && s[i] <= '9'; ++i)
-		n = 10 * n + (s[i] - '0');
+	while (s[i])
+	{
+		if (s[i] < '0' || s[i] > '9')
+		{
+			return (-1);
+		}
+		else if (s[i] >= '0' && s[i] <= '9')
+		{
+			n = 10 * n + s[i] - '0';
+		}
+		i++;
+	}
 	return (n);
-}
+} 
 
 /**
  * _itoa - converts integer to string

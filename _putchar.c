@@ -60,11 +60,15 @@ void _error(char **prog, char **av, int cmd_count)
 	free(buffer);
 	_putchar(':');
 	_putchar(' ');
+
 	if (av[0])
-		{
-			write(STDERR_FILENO, av[0], _strlen(av[0]));
-			_putchar(':');
-			_putchar(' ');
-		}
-	write(STDERR_FILENO, "not found\n", 10);
+	{
+		write(STDERR_FILENO, av[0], _strlen(av[0]));
+		_putchar(':');
+		_putchar(' ');
+	}
+	if (errno == 2)
+		write(STDERR_FILENO, "not found\n", 10);
+	if (errno == 0)
+		write(STDERR_FILENO, "Illegal number\n", 15);
 }
