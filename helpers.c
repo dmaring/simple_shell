@@ -32,13 +32,14 @@ char *_getenv(char *name)
 	while (environ[i])
 	{
 		char *haystack = environ[i];
+		char *needle = name;
 
-		while (*haystack == *name)
+		while (*haystack == *needle)
 		{
 			haystack++;
-			name++;
+			needle++;
 		}
-		if (*name == '\0')
+		if (*needle == '\0')
 			return (haystack + 1);
 
 		i++;
@@ -54,13 +55,28 @@ char *_getenv(char *name)
  */
 char *_which(char *filename)
 {
-	char *path;
-	char *token;
-	char *fullpath;
+	char *path = NULL;
+	char *buf = NULL;
+	char *wd = NULL;
+	char *token = NULL;
+	char *fullpath = NULL;
+	size_t n = 0;
 	struct stat st;
 
 	filename = str_concat("/", filename);
+
+
 	path = _getenv("PATH");
+	if (path[0] == ':')
+	{
+		wd = getcwd(buf, n);
+		fullpath = str_concat(wd, filename);
+		free(wd);
+		if (stat(fullpath, &st) == 0)
+			return (fullpath);
+		else
+			free(fullpath);
+	}
 
 	token = strtok(path, ":");
 
@@ -73,6 +89,6 @@ char *_which(char *filename)
 		token = strtok(NULL, ":");
 	}
 
+	free(filename);
 	return (fullpath);
-
 }
