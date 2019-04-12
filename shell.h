@@ -42,6 +42,7 @@ int _strcmp(char *s1, char *s2);
 
 void _env(void);
 void _execute(char *argv[], char **command, int cmd_count);
+void free_ptr(char **ptr);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);

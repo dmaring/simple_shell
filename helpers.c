@@ -20,6 +20,18 @@ void rm_nl(char **lineptr)
 }
 
 /**
+ * free_ptr -
+ */
+void free_ptr(char **ptr)
+{
+	int i;
+
+	for (i = 0; ptr[i]; i++)
+		free(ptr[i]);
+	free(ptr);
+}
+
+/**
  * _getenv - get the value of an environment variabl
  * @name: input string
  *
