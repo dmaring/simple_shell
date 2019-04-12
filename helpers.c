@@ -55,10 +55,13 @@ char *_getenv(char *name)
  */
 char *_which(char *filename)
 {
-	char *path;
-	char *pwd;
-	char *token;
-	char *fullpath;
+	char *path = NULL;
+	char *buf = NULL;
+	char *wd = NULL;
+	char *token = NULL;
+	char *fullpath = NULL;
+	size_t n = 0;
+
 	struct stat st;
 
 	filename = str_concat("/", filename);
@@ -67,8 +70,10 @@ char *_which(char *filename)
 	path = _getenv("PATH");
 	if (path[0] == ':')
 	{
-		pwd = _getenv("PWD");
-		fullpath = str_concat(pwd, filename);
+		wd = getcwd(buf, n);
+		fullpath = str_concat(wd, filename);
+		free(wd);
+
 		if (stat(fullpath, &st) == 0)
 			return (fullpath);
 		else
@@ -81,8 +86,10 @@ char *_which(char *filename)
 	{
 		fullpath = str_concat(token, filename);
 		if (stat(fullpath, &st) == 0)
+		{
+			free(filename);
 			return (fullpath);
-
+		}
 		token = strtok(NULL, ":");
 	}
 

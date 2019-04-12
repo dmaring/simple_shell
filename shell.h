@@ -11,6 +11,16 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define ILLNUM 227
+
+typedef struct cmd
+{
+	int argc;
+	char **argv;
+	char **av;
+	int cmd_count;
+} cmd;
+
 extern char **environ;
 
 char *_itoa(int n, char *s);
@@ -19,8 +29,10 @@ char **split_line(char *line);
 char *str_concat(char *s1, char *s2);
 char *_strdup(char *s);
 char *_strstr(char *haystack, char *needle);
+char *_which(char *filename);
+char *_getenv(char *name);
 
-int _atoi(char *s);
+double _atoi(char *s);
 int _cd(char *path);
 int _help(char **args);
 int _launch(char **args);
@@ -29,9 +41,13 @@ int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
 
 void _env(void);
+void _execute(char *argv[], char **command, int cmd_count);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);
-void _error(char **av);
+void _error(char **prog, char **av, int cmd_count);
+void sigintHandler(int signo);
+void exit_handler(char **argv, char **command, int cmd_count);
+
 
 #endif /*__SHELL_H__*/

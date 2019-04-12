@@ -49,22 +49,26 @@ void _env(void)
  * _error - prints error
  * @av: argument
  */
-void _error(char **av)
+void _error(char **prog, char **av, int cmd_count)
 {
 	char *buffer = malloc(sizeof(char) * 10);
 
-	write(STDERR_FILENO, av[0], _strlen(av[0]));
+	write(STDERR_FILENO, prog[0], _strlen(prog[0]));
 	_putchar(':');
 	_putchar(' ');
-	_puts(_itoa(errno, buffer));
+	_puts(_itoa(cmd_count, buffer));
 	free(buffer);
 	_putchar(':');
 	_putchar(' ');
-	if (av[1])
-		{
-			write(STDERR_FILENO, av[1], _strlen(av[1]));
-			_putchar(':');
-			_putchar(' ');
-		}
-	write(STDERR_FILENO, "not found\n", 10);
+
+	if (av[0])
+	{
+		write(STDERR_FILENO, av[0], _strlen(av[0]));
+		_putchar(':');
+		_putchar(' ');
+	}
+	if (errno == 2)
+		write(STDERR_FILENO, "not found\n", 10);
+	if (errno == 0)
+		write(STDERR_FILENO, "Illegal number\n", 15);
 }

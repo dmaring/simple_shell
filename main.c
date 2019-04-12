@@ -1,5 +1,4 @@
 #include "shell.h"
-#include <errno.h>
 
 /**
  * main - entrypoint to simple_shell
@@ -8,71 +7,121 @@
  */
 int main(int argc, char *argv[], char *env[])
 {
-	pid_t childpid;
 	size_t n = 0;
 	char *lineptr = NULL;
 	char **command;
-	char buffer[10];
-	int gl;
+	int gl = 0, cmd_count = 0;
+	(void)argc, (void)env;
 
-	int status;
-
-	(void)argc;
-	(void)argv;
-	(void)env;
-
- 	while (1)
+	signal(SIGINT, sigintHandler);
+	while (1)
 	{
-		write(STDERR_FILENO, "$ ", 2);
-
+		if (isatty(STDIN_FILENO))
+			write(STDERR_FILENO, "$ ", 2);
+		cmd_count++;
 		gl = getline(&lineptr, &n, stdin);
 		if (gl < 0)
 		{
-			perror("getline failed\n");
+			if (isatty(STDIN_FILENO))
+				_putchar('\n');
+			free(lineptr);
 			return (0);
 		}
-
-		command = split_line(lineptr);
-		if (!command[0])
-		{
-			free(lineptr);
-			free(command);
+		if (lineptr[0] == '\n')
 			continue;
-		}
-
+		command = split_line(lineptr);
 		if (_strcmp(command[0], "exit") == 0)
 		{
-			exit(0);
+			exit_handler(argv, command, cmd_count);
+			continue;
 		}
 		if (_strcmp(command[0], "env") == 0)
 		{
-//			_env();
+			_env();
+			free(command);
+			free(lineptr);
 			continue;
 		}
-
-		childpid = fork();
-		if (childpid == -1)
-		{
-			perror("Child process failed.");
-			exit(EXIT_FAILURE);
-		}
-		if (childpid == 0)
-		{
-			if (execve(command[0], command, NULL) < 0)
-			{
-				/* check for errno on failure */
-				if (errno == 1 || errno == 2)
-				{
-					_error(command);
-				}
-				exit(1);
-			}
-		}
-
-		else
-		{
-			wait(&status);
-		}
+		_execute(argv, command, cmd_count);
+		/* free(command); */
+		/* free(lineptr); */
 	}
 	return (0);
+}
+
+/**
+ * _execute - executes commands from main function
+ * @argv: argument from command line
+ * @command: parsed command array
+ * @cmd_count: count of commands in session
+ */
+void _execute(char *argv[], char **command, int cmd_count)
+{
+	pid_t childpid;
+	int status;
+	char *shcmd;
+
+	childpid = fork();
+	if (childpid == -1)
+	{
+		perror("Child process failed.");
+		exit(EXIT_FAILURE);
+	}
+	/* child proccess do this */
+	if (childpid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		/* _which will get full path of command */
+		shcmd = command[0];
+
+		if (*command[0] != '/')
+			command[0] = _which(command[0]);
+		if (execve(command[0], command, NULL) < 0)
+		{
+			/* check for errno 2 on failure */
+			if (errno == 2)
+			{
+				_error(argv, &shcmd, cmd_count);
+				exit(127);
+			}
+			free(command);
+			exit(1);
+		}
+	}
+	else
+	{
+		wait(&status);
+	}
+}
+
+/**
+ * exit_handler - handles exit
+ */
+void exit_handler(char **prog, char **command, int cmd_count)
+{
+	long int a = 0;
+	char *shcmd;
+
+	if (command[1] == NULL)
+	{
+		exit(0);
+	}
+	a = _atoi(command[1]);
+	shcmd = command[0];
+	if (a > 2147483647 || a < 0)
+		_error(prog, &shcmd, cmd_count);
+	else
+		exit(_atoi(command[1]));
+}
+
+/**
+ * sigintHandler - handles Ctrl+C
+ * @signo: signal to handle
+ * Return: void
+ */
+void sigintHandler(int signo)
+{
+	signal(SIGINT, sigintHandler);
+	(void)signo;
+	_puts("\n$ ");
 }
