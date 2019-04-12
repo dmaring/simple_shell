@@ -11,7 +11,7 @@ int main(int argc, char *argv[], char *env[])
 	char *lineptr = NULL;
 	char **command;
 	int gl = 0, cmd_count = 0;
-	(void)argc, (void)env;
+	(void)env;
 
 	signal(SIGINT, sigintHandler);
 	while (1)
@@ -25,7 +25,7 @@ int main(int argc, char *argv[], char *env[])
 			if (isatty(STDIN_FILENO))
 				_putchar('\n');
 			free(lineptr);
-			return (0);
+			exit(errno);
 		}
 		if (lineptr[0] == '\n')
 			continue;
@@ -38,14 +38,14 @@ int main(int argc, char *argv[], char *env[])
 		if (_strcmp(command[0], "env") == 0)
 		{
 			_env();
-			free(command);
-			free(lineptr);
 			continue;
 		}
 		_execute(argv, command, cmd_count);
-		/* free(command); */
+//		free(command);
+
 		/* free(lineptr); */
 	}
+	free(lineptr);
 	return (0);
 }
 
@@ -59,11 +59,13 @@ void _execute(char *argv[], char **command, int cmd_count)
 {
 	pid_t childpid;
 	int status;
-	char *shcmd;
+	char *shcmd = 0;
+//	char **new_cmd = 0;
 
 	childpid = fork();
 	if (childpid == -1)
 	{
+		free(argv);
 		perror("Child process failed.");
 		exit(EXIT_FAILURE);
 	}
@@ -82,7 +84,9 @@ void _execute(char *argv[], char **command, int cmd_count)
 			if (errno == 2)
 			{
 				_error(argv, &shcmd, cmd_count);
-				exit(127);
+				free(argv);
+				free(command);
+				exit(EXIT_SUCCESS);
 			}
 			free(command);
 			exit(1);
@@ -91,6 +95,7 @@ void _execute(char *argv[], char **command, int cmd_count)
 	else
 	{
 		wait(&status);
+		free(command);
 	}
 }
 
@@ -100,16 +105,16 @@ void _execute(char *argv[], char **command, int cmd_count)
 void exit_handler(char **prog, char **command, int cmd_count)
 {
 	long int a = 0;
-	char *shcmd;
+	char *shcmd = 0;
 
 	if (command[1] == NULL)
 	{
 		exit(0);
 	}
 	a = _atoi(command[1]);
-	shcmd = command[0];
+//	shcmd = command[0];
 	if (a > 2147483647 || a < 0)
-		_error(prog, &shcmd, cmd_count);
+		_error(prog, command, cmd_count);
 	else
 		exit(_atoi(command[1]));
 }
@@ -123,5 +128,6 @@ void sigintHandler(int signo)
 {
 	signal(SIGINT, sigintHandler);
 	(void)signo;
-	_puts("\n$ ");
+	write(STDERR_FILENO, "\n$ ", 3);
+	fflush(stdout);
 }
