@@ -21,7 +21,15 @@ typedef struct cmd
 	int cmd_count;
 } cmd;
 
+typedef struct envvar
+{
+	char *varname;
+	struct envvar *next;
+} envvar_t;
+
 extern char **environ;
+
+envvar_t *add_env_node(envvar_t **head, char *varname);
 
 char *_itoa(int n, char *s);
 char *read_line(void);
@@ -39,6 +47,7 @@ int _launch(char **args);
 int _putchar(char c);
 int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
+int word_count(char *s);
 
 void _env(void);
 void _execute(char *argv[], char **command, int cmd_count);

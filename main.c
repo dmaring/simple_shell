@@ -20,6 +20,7 @@ int main(int argc, char *argv[], char *env[])
 			write(STDERR_FILENO, "$ ", 2);
 		cmd_count++;
 		gl = getline(&lineptr, &n, stdin);
+		/* gl -1 if getline failes */
 		if (gl < 0)
 		{
 			if (isatty(STDIN_FILENO))
@@ -27,9 +28,12 @@ int main(int argc, char *argv[], char *env[])
 			free(lineptr);
 			return (0);
 		}
-		if (lineptr[0] == '\n')
+		/* condition where user doesnt entire commands */
+		if ( word_count(lineptr) == 0)
 			continue;
+		/* command will hold list of arguments passed in lineptr */
 		command = split_line(lineptr);
+		/* TODO function search builtins and return func ptr */
 		if (_strcmp(command[0], "exit") == 0)
 		{
 			exit_handler(argv, command, cmd_count);
@@ -42,6 +46,8 @@ int main(int argc, char *argv[], char *env[])
 			free(lineptr);
 			continue;
 		}
+		/* execute arguments passing in calling process \
+		   command list, number of words in command */
 		_execute(argv, command, cmd_count);
 		/* free(command); */
 		/* free(lineptr); */
@@ -70,12 +76,15 @@ void _execute(char *argv[], char **command, int cmd_count)
 	/* child proccess do this */
 	if (childpid == 0)
 	{
+		/* ignore ctrl c SIGINT */
 		signal(SIGINT, SIG_DFL);
 		/* _which will get full path of command */
 		shcmd = command[0];
 
+		/* handle case of entering abs path for command */
 		if (*command[0] != '/')
 			command[0] = _which(command[0]);
+		/* check for failure of execve */
 		if (execve(command[0], command, NULL) < 0)
 		{
 			/* check for errno 2 on failure */
