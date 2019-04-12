@@ -96,7 +96,8 @@ char *str_concat(char *s1, char *s2)
 
 	j = len1 + len2 + 1;
 
-	s = malloc(sizeof(char) * j);
+	s = (char *)_calloc(j, sizeof(char));
+	/* s = malloc(sizeof(char) * j); */
 	if (s == NULL)
 		return (NULL);
 

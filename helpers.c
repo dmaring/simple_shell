@@ -94,8 +94,9 @@ char *_which(char *filename)
 		token = strtok(NULL, ":");
 	}
 
+	free(fullpath);
 	free(filename);
-	return (fullpath);
+	return (NULL);
 }
 
 void *_calloc(unsigned int nmemb, unsigned int size)
