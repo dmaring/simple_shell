@@ -20,6 +20,23 @@ void rm_nl(char **lineptr)
 }
 
 /**
+ * free_ptr - frees pointer array
+ * @ptr: string to free
+ */
+void free_ptr(char **ptr)
+{
+	int i = 0;
+
+	while (ptr)
+	{
+		free(ptr[i]);
+		i++;
+	}
+	free(ptr);
+}
+
+
+/**
  * _getenv - get the value of an environment variabl
  * @name: input string
  *
