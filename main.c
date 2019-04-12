@@ -12,6 +12,7 @@ int main(int argc, char *argv[], char *env[])
 	char **command;
 	int gl = 0, cmd_count = 0;
 	(void)env;
+	(void)argc;
 
 	signal(SIGINT, sigintHandler);
 	while (1)
@@ -47,7 +48,7 @@ int main(int argc, char *argv[], char *env[])
 		/* execute arguments passing in calling process \
 		   command list, number of words in command */
 		_execute(argv, command, cmd_count);
-//		free(command);
+		/* free(command);*/
 
 		/* free(lineptr); */
 	}
@@ -65,8 +66,8 @@ void _execute(char *argv[], char **command, int cmd_count)
 {
 	pid_t childpid;
 	int status;
-	char *shcmd = 0;
-//	char **new_cmd = 0;
+	char *shcmd = NULL;
+/* 	char **new_cmd = 0; */
 
 	childpid = fork();
 	if (childpid == -1)
@@ -93,7 +94,6 @@ void _execute(char *argv[], char **command, int cmd_count)
 			if (errno == 2)
 			{
 				_error(argv, &shcmd, cmd_count);
-				free(argv);
 				free(command);
 				exit(EXIT_SUCCESS);
 			}
@@ -104,7 +104,6 @@ void _execute(char *argv[], char **command, int cmd_count)
 	else
 	{
 		wait(&status);
-		free(command);
 	}
 }
 
@@ -114,14 +113,13 @@ void _execute(char *argv[], char **command, int cmd_count)
 void exit_handler(char **prog, char **command, int cmd_count)
 {
 	long int a = 0;
-	char *shcmd = 0;
 
 	if (command[1] == NULL)
 	{
 		exit(0);
 	}
 	a = _atoi(command[1]);
-//	shcmd = command[0];
+	/* shcmd = command[0]; */
 	if (a > 2147483647 || a < 0)
 		_error(prog, command, cmd_count);
 	else
