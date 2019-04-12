@@ -19,19 +19,17 @@ void rm_nl(char **lineptr)
 	ptr[i] = '\0';
 }
 
+
 /**
  * free_ptr - frees pointer array
  * @ptr: string to free
  */
 void free_ptr(char **ptr)
 {
-	int i = 0;
+	int i;
 
-	while (*ptr)
-	{
+ 	for (i = 0; ptr[i]; i++)
 		free(ptr[i]);
-		i++;
-	}
 	free(ptr);
 }
 
