@@ -20,18 +20,6 @@ void rm_nl(char **lineptr)
 }
 
 /**
- * free_ptr -
- */
-void free_ptr(char **ptr)
-{
-	int i;
-
-	for (i = 0; ptr[i]; i++)
-		free(ptr[i]);
-	free(ptr);
-}
-
-/**
  * _getenv - get the value of an environment variabl
  * @name: input string
  *
@@ -85,7 +73,10 @@ char *_which(char *filename)
 		fullpath = str_concat(wd, filename);
 		free(wd);
 		if (stat(fullpath, &st) == 0)
+		{
+			free(filename);
 			return (fullpath);
+		}
 		else
 			free(fullpath);
 	}
@@ -105,4 +96,22 @@ char *_which(char *filename)
 
 	free(filename);
 	return (fullpath);
+}
+
+void *_calloc(unsigned int nmemb, unsigned int size)
+{
+	unsigned int i;
+	char *s;
+
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+	s = malloc(nmemb * size);
+
+	if (s == NULL)
+		return (NULL);
+	for (i = 0; i < nmemb * size; i++)
+	{
+		s[i] = 0;
+	}
+	return (s);
 }

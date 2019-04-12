@@ -49,6 +49,7 @@ int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
 int word_count(char *s);
 
+void *_calloc(unsigned int nmemb, unsigned int size);
 void _env(void);
 void _execute(char *argv[], char **command, int cmd_count);
 void free_ptr(char **ptr);

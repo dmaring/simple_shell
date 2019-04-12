@@ -36,12 +36,12 @@ char **split_line(char *line)
 	int i = 0;
 	int bufsize;
 	char *separator = " ";
-	char *token;
-	char **words;
+	char *token = NULL;
+	char **words = NULL;
 
 	rm_nl(&line);
 	bufsize = word_count(line);
-        words = malloc(sizeof(char *) * (bufsize));
+        words = malloc(sizeof(char *) * (bufsize + 1));
 
 	if (!bufsize)
 	{
@@ -55,12 +55,13 @@ char **split_line(char *line)
 		exit(errno);
 	}
 
-	token = strtok(line, separator);
+	token = _strdup(strtok(line, separator));
+
 	while (token)
 	{
 		words[i] = token;
 		i++;
-		token = strtok(NULL, separator);
+		token = _strdup(strtok(NULL, separator));
 	}
 	words[i] = NULL;
 	return (words);
@@ -76,7 +77,7 @@ char **split_line(char *line)
 char *str_concat(char *s1, char *s2)
 {
 	unsigned int len1, len2, i, j = 0;
-	char *s;
+	char *s = NULL;
 
 	if (s1 == NULL)
 		len1 = 0;
@@ -119,8 +120,8 @@ char *str_concat(char *s1, char *s2)
 
 char *_strdup(char *str)
 {
-	char *result;
-	int len;
+	char *result = NULL;
+	int len = 0;
 	int i = 0;
 
 	if (str == NULL)
@@ -131,7 +132,8 @@ char *_strdup(char *str)
 
 	len = i;
 
-	result = malloc(sizeof(char) * (len + 1));
+	result = (char *)_calloc((len + 1), sizeof(char));
+	/* result = malloc(sizeof(char) * (len + 1));*/
 	if (result == NULL)
 		return (NULL);
 

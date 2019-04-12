@@ -9,7 +9,7 @@ int main(int argc, char *argv[], char *env[])
 {
 	size_t n = 0;
 	char *lineptr = NULL;
-	char **command;
+	char **command = NULL;
 	int gl = 0, cmd_count = 0;
 	(void)env;
 	(void)argc;
@@ -27,13 +27,18 @@ int main(int argc, char *argv[], char *env[])
 			if (isatty(STDIN_FILENO))
 				_putchar('\n');
 			free(lineptr);
+			lineptr = NULL;
 			exit(errno);
 		}
 		/* condition where user doesnt entire commands */
 		if ( word_count(lineptr) == 0)
+		{
 			continue;
+		}
 		/* command will hold list of arguments passed in lineptr */
 		command = split_line(lineptr);
+		free(lineptr);
+		lineptr = NULL;
 		/* TODO function search builtins and return func ptr */
 		if (_strcmp(command[0], "exit") == 0)
 		{
@@ -119,7 +124,7 @@ void exit_handler(char **prog, char **command, int cmd_count)
 		exit(0);
 	}
 	a = _atoi(command[1]);
-	/* shcmd = command[0]; */
+
 	if (a > 2147483647 || a < 0)
 		_error(prog, command, cmd_count);
 	else
@@ -135,6 +140,6 @@ void sigintHandler(int signo)
 {
 	signal(SIGINT, sigintHandler);
 	(void)signo;
-	write(STDERR_FILENO, "\n$ ", 3);
+	write(STDERR_FILENO, "\n$", 3);
 	fflush(stdout);
 }
