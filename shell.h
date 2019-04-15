@@ -59,6 +59,6 @@ void rm_nl(char **s);
 void _error(char **prog, char **av, int cmd_count);
 void sigintHandler(int signo);
 void exit_handler(char **argv, char **command, int cmd_count);
-
+void ffree(char **pp);
 
 #endif /*__SHELL_H__*/

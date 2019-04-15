@@ -74,6 +74,7 @@ void _execute(char *argv[], char **command, int cmd_count)
 	char *shcmd = NULL;
 /* 	char **new_cmd = 0; */
 
+
 	childpid = fork();
 	if (childpid == -1)
 	{
@@ -99,16 +100,17 @@ void _execute(char *argv[], char **command, int cmd_count)
 			if (errno == 2)
 			{
 				_error(argv, &shcmd, cmd_count);
-				free(command);
+				ffree(command);
 				exit(EXIT_SUCCESS);
 			}
-			free(command);
+			ffree(command);
 			exit(1);
 		}
 	}
 	else
 	{
 		wait(&status);
+		ffree(command);
 	}
 }
 
@@ -119,16 +121,20 @@ void exit_handler(char **prog, char **command, int cmd_count)
 {
 	long int a = 0;
 
+	a = command[1] ? _atoi(command[1]) : 0;
 	if (command[1] == NULL)
 	{
+		ffree(command);
 		exit(0);
 	}
-	a = _atoi(command[1]);
 
 	if (a > 2147483647 || a < 0)
 		_error(prog, command, cmd_count);
 	else
-		exit(_atoi(command[1]));
+	{
+		ffree(command);
+		exit(a);
+	}
 }
 
 /**
