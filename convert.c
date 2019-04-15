@@ -11,13 +11,9 @@ double _atoi(char *s)
 	int i = 0;
 	double n = 0;
 
-//	while (s[i])
-//	{
-//	if (s[i] == '+' && (s[i++] >= '0' && s[i++] <= '9'))
-//		i++;
-/*	else*/ if (s[i] == '+' && (!(s[i++])))
+	if (s[i] == '+' && (!(s[i++])))
 		return (-1);
-	
+
 	while (s[i])
 	{
 		if (s[i] < '0' || s[i] > '9')
@@ -31,7 +27,7 @@ double _atoi(char *s)
 		i++;
 	}
 	return (n);
-} 
+}
 
 /**
  * _itoa - converts integer to string
