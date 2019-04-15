@@ -115,7 +115,7 @@ File `myscript.sh`
 
 ```
 #! /holberton/repos/simple_shell/simple_shell
-echo Hello World
+echo "echo Hello World"
 ```
 
 Execute script
@@ -134,7 +134,7 @@ Hello World
 Input
 
 ```
-$ echo hello world | ./simple_shell
+$ echo "echo hello world" | ./simple_shell
 ```
 
 Output
