@@ -3,6 +3,10 @@
 /**
  * main - entrypoint to simple_shell
  *
+ * @argc: number of arguments
+ * @argv: commands and arguments
+ * @env: current environment
+ *
  * Return: 0 on success
  */
 int main(int argc, char *argv[], char *env[])
@@ -11,8 +15,7 @@ int main(int argc, char *argv[], char *env[])
 	char *lineptr = NULL;
 	char **command = NULL;
 	int gl = 0, cmd_count = 0;
-	(void)env;
-	(void)argc;
+	(void)argc, (void)env;
 
 	signal(SIGINT, sigintHandler);
 	while (1)
@@ -21,25 +24,18 @@ int main(int argc, char *argv[], char *env[])
 			write(STDERR_FILENO, "$ ", 2);
 		cmd_count++;
 		gl = getline(&lineptr, &n, stdin);
-		/* gl -1 if getline failes */
 		if (gl < 0)
 		{
 			if (isatty(STDIN_FILENO))
 				_putchar('\n');
 			free(lineptr);
-			lineptr = NULL;
 			exit(errno);
 		}
-		/* condition where user doesnt entire commands */
-		if ( word_count(lineptr) == 0)
-		{
+		if (word_count(lineptr) == 0)
 			continue;
-		}
-		/* command will hold list of arguments passed in lineptr */
 		command = split_line(lineptr);
 		free(lineptr);
 		lineptr = NULL;
-		/* TODO function search builtins and return func ptr */
 		if (_strcmp(command[0], "exit") == 0)
 		{
 			exit_handler(argv, command, cmd_count);
@@ -50,16 +46,12 @@ int main(int argc, char *argv[], char *env[])
 			_env();
 			continue;
 		}
-		/* execute arguments passing in calling process \
-		   command list, number of words in command */
 		_execute(argv, command, cmd_count);
-		/* free(command);*/
-
-		/* free(lineptr); */
 	}
 	free(lineptr);
 	return (0);
 }
+
 
 /**
  * _execute - executes commands from main function
@@ -72,13 +64,10 @@ void _execute(char *argv[], char **command, int cmd_count)
 	pid_t childpid;
 	int status;
 	char *shcmd = NULL;
-/* 	char **new_cmd = 0; */
-
 
 	childpid = fork();
 	if (childpid == -1)
 	{
-		free(argv);
 		perror("Child process failed.");
 		exit(EXIT_FAILURE);
 	}
@@ -96,7 +85,6 @@ void _execute(char *argv[], char **command, int cmd_count)
 		/* check for failure of execve */
 		if (execve(command[0], command, NULL) < 0)
 		{
-			/* check for errno 2 on failure */
 			if (errno == 2)
 			{
 				_error(argv, &shcmd, cmd_count);
@@ -114,8 +102,12 @@ void _execute(char *argv[], char **command, int cmd_count)
 	}
 }
 
+
 /**
  * exit_handler - handles exit
+ * @prog: program
+ * @command: exit number
+ * @cmd_count: current command count
  */
 void exit_handler(char **prog, char **command, int cmd_count)
 {
@@ -137,6 +129,7 @@ void exit_handler(char **prog, char **command, int cmd_count)
 	}
 }
 
+
 /**
  * sigintHandler - handles Ctrl+C
  * @signo: signal to handle
@@ -146,6 +139,6 @@ void sigintHandler(int signo)
 {
 	signal(SIGINT, sigintHandler);
 	(void)signo;
-	write(STDERR_FILENO, "\n$", 3);
+	write(STDERR_FILENO, "\n$ ", 3);
 	fflush(stdout);
 }
