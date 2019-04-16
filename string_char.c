@@ -46,13 +46,13 @@ char **split_line(char *line)
 
 	if (!bufsize)
 	{
-		free(words);
+		ffree(words);
 		exit(errno);
 	}
 
 	if (!words)
 	{
-		free(words);
+		ffree(words);
 		exit(errno);
 	}
 

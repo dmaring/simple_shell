@@ -60,20 +60,23 @@ char *_which(char *filename)
 	char *wd = NULL;
 	char *token = NULL;
 	char *fullpath = NULL;
+	char *fullfilename = NULL;
 	size_t n = 0;
 	struct stat st;
 
-	filename = str_concat("/", filename);
+	fullfilename = str_concat("/", filename);
 
 	path = _getenv("PATH");
+
 	if (path[0] == ':')
 	{
 		wd = getcwd(buf, n);
-		fullpath = str_concat(wd, filename);
+		fullpath = str_concat(wd, fullfilename);
 		free(wd);
-		if (stat(fullpath, &st) == 0)
+		/* check if exists & check st_mode for user right to execute */
+		if (stat(fullpath, &st) == 0 && st.st_mode & S_IXUSR)
 		{
-			free(filename);
+			free(fullfilename);
 			return (fullpath);
 		}
 		else
@@ -84,15 +87,16 @@ char *_which(char *filename)
 
 	while (token != NULL)
 	{
-		fullpath = str_concat(token, filename);
-		if (stat(fullpath, &st) == 0)
+		fullpath = str_concat(token, fullfilename);
+		/* check if exists & check st_mode for user right to execute */
+		if (stat(fullpath, &st) == 0 && st.st_mode & S_IXUSR)
 		{
-			free(filename);
+			free(fullfilename);
 			return (fullpath);
 		}
 		token = strtok(NULL, ":");
 	}
-	free(filename);
+	free(fullfilename);
 	return (fullpath);
 }
 
