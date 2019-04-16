@@ -40,13 +40,12 @@ void free_ptr(char **ptr)
  *
  * Return: pointer to string value of @key
  */
-char *_getenv(char *name)
+char *_getenv(envvar_t **env, char *name)
 {
-	int i = 0;
 
-	while (environ[i])
+	while (env)
 	{
-		char *haystack = environ[i];
+		char *haystack = (*env)->varname;
 		char *needle = name;
 
 		while (*haystack == *needle)
@@ -57,7 +56,7 @@ char *_getenv(char *name)
 		if (*needle == '\0')
 			return (haystack + 1);
 
-		i++;
+		*env = (*env)->next;
 	}
 	return (NULL);
 }
@@ -68,7 +67,7 @@ char *_getenv(char *name)
  *
  * Return: character string of absolute path to command or script
  */
-char *_which(char *filename)
+char *_which(envvar_t  **env, char *filename)
 {
 	char *path = NULL;
 	char *buf = NULL;
@@ -81,7 +80,7 @@ char *_which(char *filename)
 	filename = str_concat("/", filename);
 
 
-	path = _getenv("PATH");
+	path = _getenv(env, "PATH");
 	if (path[0] == ':')
 	{
 		wd = getcwd(buf, n);

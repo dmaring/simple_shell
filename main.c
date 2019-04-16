@@ -10,10 +10,11 @@ int main(int argc, char *argv[], char *env[])
 	size_t n = 0;
 	char *lineptr = NULL;
 	char **command = NULL;
+	envvar_t *envhead = NULL;
 	int gl = 0, cmd_count = 0;
-	(void)env;
 	(void)argc;
 
+	build_env_list(&envhead, env);
 	signal(SIGINT, sigintHandler);
 	while (1)
 	{
@@ -47,16 +48,16 @@ int main(int argc, char *argv[], char *env[])
 		}
 		if (_strcmp(command[0], "env") == 0)
 		{
-			_env();
+			_env(envhead);
 			continue;
 		}
 		/* execute arguments passing in calling process \
 		   command list, number of words in command */
-		_execute(argv, command, cmd_count);
-		/* free(command);*/
+		_execute(argv, command, cmd_count, &envhead);
 
-		/* free(lineptr); */
+		/* free_env_list(envhead); */
 	}
+	/* free_env_list(envhead); */
 	free(lineptr);
 	return (0);
 }
@@ -67,11 +68,12 @@ int main(int argc, char *argv[], char *env[])
  * @command: parsed command array
  * @cmd_count: count of commands in session
  */
-void _execute(char *argv[], char **command, int cmd_count)
+void _execute(char *argv[], char **command, int cmd_count, envvar_t **env)
 {
 	pid_t childpid;
 	int status;
 	char *shcmd = NULL;
+	char **envarray;
 /* 	char **new_cmd = 0; */
 
 
@@ -92,7 +94,9 @@ void _execute(char *argv[], char **command, int cmd_count)
 
 		/* handle case of entering abs path for command */
 		if (*command[0] != '/')
-			command[0] = _which(command[0]);
+			command[0] = _which(env, command[0]);
+		/* translate env linked list to array */
+		envarray = linked_to_array(env);
 		/* check for failure of execve */
 		if (execve(command[0], command, NULL) < 0)
 		{

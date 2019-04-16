@@ -33,15 +33,14 @@ void _puts(char *s)
  * _env - prints the current environment
  * Return: void
  */
-void _env(void)
+void _env(envvar_t *envhead)
 {
-	int i = 0;
 
-	while (environ[i])
+	while (envhead)
 	{
-		write(STDIN_FILENO, environ[i], _strlen(environ[i]));
+		write(STDIN_FILENO, envhead->varname, _strlen(envhead->varname));
 		_putchar('\n');
-		i++;
+		envhead = envhead->next;
 	}
 }
 
