@@ -41,6 +41,7 @@ char *_which(envvar_t **env, char *filename);
 char *_getenv(envvar_t **env, char *name);
 char **linked_to_array(envvar_t **head);
 
+size_t print_listint(envvar_t *h);
 size_t listint_len(envvar_t *h);
 double _atoi(char *s);
 int _cd(char *path);
@@ -51,7 +52,8 @@ int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
 int word_count(char *s);
 int build_env_list(envvar_t **head, char **env);
-int free_env_list(envvar_t *head);
+int free_env_list(envvar_t **head);
+
 
 void *_calloc(unsigned int nmemb, unsigned int size);
 void _env(envvar_t *s);

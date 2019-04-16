@@ -15,7 +15,10 @@ envvar_t *add_env_node(envvar_t **head, char *varname)
 		return (NULL);
 
 	new->varname = strdup(varname);
-	new->next = *head;
+	if (*head == NULL)
+		new->next = NULL;
+	else
+		new->next = *head;
 	*head = new;
 
 	return(new);
@@ -43,10 +46,10 @@ envvar_t *add_env_node(envvar_t **head, char *varname)
  *
  *
  */
-int free_env_list(envvar_t *head)
+int free_env_list(envvar_t **head)
 {
 	/* store head in current to preserve head */
-	envvar_t *current = head;
+	envvar_t *current = *head;
 	/* create temp to store linked list item to be freed */
 	envvar_t *temp;
 
@@ -57,6 +60,8 @@ int free_env_list(envvar_t *head)
 		free(temp->varname);
 		free(temp);
 	}
+
+	/* free(head); */
 
 	return (1);
 }
@@ -96,7 +101,7 @@ char **linked_to_array(envvar_t **head)
 	/* count number of items in linked list */
 	i = listint_len(*head);
 	/* malloc list of pointers for number of items */
-	list = malloc(sizeof(char *) * i);
+	list = _calloc(i, sizeof(char *) * i);
 
 	while (*a)
 	{
@@ -126,6 +131,28 @@ size_t listint_len(envvar_t *h)
 		nodeCount++;
 		h = h->next;
 	}
+
+	return (nodeCount);
+}
+
+
+/**
+ * print_listint - prints all elements of a listint_t list
+ * @h: pointer to head of linked list
+ *
+ * Return: number of nodes in the list
+ */
+size_t print_listint(envvar_t *h)
+{
+	size_t nodeCount = 0;
+
+	while (h != NULL)
+	{
+		printf("%s\n", h->varname);
+		nodeCount++;
+		h = h->next;
+	}
+
 
 	return (nodeCount);
 }

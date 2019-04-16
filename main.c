@@ -98,18 +98,25 @@ void _execute(char *argv[], char **command, int cmd_count, envvar_t **env)
 		/* translate env linked list to array */
 		envarray = linked_to_array(env);
 		/* check for failure of execve */
-		if (execve(command[0], command, NULL) < 0)
+		free_env_list(env);
+		if (execve(command[0], command, envarray) < 0)
 		{
+			ffree(envarray);
+			ffree(command);
 			/* check for errno 2 on failure */
 			if (errno == 2)
 			{
 				_error(argv, &shcmd, cmd_count);
-				ffree(command);
+				/* ffree(envarray); */
+				/* ffree(command); */
 				exit(EXIT_SUCCESS);
 			}
-			ffree(command);
+			/* ffree(envarray); */
+			/* ffree(command); */
 			exit(1);
 		}
+		ffree(command);
+		ffree(envarray);
 	}
 	else
 	{
