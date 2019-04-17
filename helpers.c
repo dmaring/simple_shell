@@ -17,9 +17,8 @@ void rm_nl(char **lineptr)
 	ptr[i] = '\0';
 }
 
-
 /**
- * _getenv - get the value of an environment variabl
+ * _getenv - get the value of an environment variable
  * @name: input string
  *
  * Return: pointer to string value of @key
@@ -40,12 +39,10 @@ char *_getenv(char *name)
 		}
 		if (*needle == '\0')
 			return (haystack + 1);
-
 		i++;
 	}
 	return (NULL);
 }
-
 
 /**
  * _which - return absolute path of passed command or script
@@ -96,7 +93,6 @@ char *_which(char *filename)
 	return (fullpath);
 }
 
-
 /**
  * _calloc - copy of calloc, mallocs and initializes memory as NULL
  * @nmemb: number of elements in array
@@ -120,7 +116,6 @@ void *_calloc(unsigned int nmemb, unsigned int size)
 	}
 	return (s);
 }
-
 
 /**
  * ffree - frees a string of strings

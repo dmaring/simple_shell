@@ -63,17 +63,20 @@ void _error(char **prog, char **av, int cmd_count)
 	if (av[0])
 	{
 		write(STDERR_FILENO, av[0], _strlen(av[0]));
-		_putchar(':');
-		_putchar(' ');
+		write(STDERR_FILENO, ": ", 2);
+	}
+	if (errno == EACCES)
+	{
+		write(STDERR_FILENO, av[1], _strlen(av[1]));
+		write(STDERR_FILENO, ": Permission Denied\n", 20);
 	}
 	if (errno == 2)
 		write(STDERR_FILENO, "not found\n", 10);
 	if (errno == 0)
 	{
 		write(STDERR_FILENO, "Illegal number", 15);
-		_puts(": ");
+		write(STDERR_FILENO, ": ", 2);
 		write(STDERR_FILENO, av[1], _strlen(av[1]));
 		write(STDERR_FILENO, "\n", 1);
 	}
-
 }

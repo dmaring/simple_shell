@@ -3,19 +3,17 @@
 /**
  * main - entrypoint to simple_shell
  *
- * @argc: number of arguments
+ * @ac: number of arguments
  * @argv: commands and arguments
- * @env: current environment
  *
  * Return: 0 on success
  */
-int main(int argc, char *argv[], char *env[])
+int main(int __attribute__((unused))ac, char *argv[])
 {
 	size_t n = 0;
 	char *lineptr = NULL;
 	char **command = NULL;
 	int gl = 0, cmd_count = 0;
-	(void)argc, (void)env;
 
 	signal(SIGINT, sigintHandler);
 	while (1)
@@ -29,7 +27,7 @@ int main(int argc, char *argv[], char *env[])
 			if (isatty(STDIN_FILENO))
 				_putchar('\n');
 			free(lineptr);
-			exit(errno);
+			exit(0);
 		}
 		if (word_count(lineptr) == 0)
 			continue;
@@ -44,6 +42,7 @@ int main(int argc, char *argv[], char *env[])
 		if (_strcmp(command[0], "env") == 0)
 		{
 			_env();
+			ffree(command);
 			continue;
 		}
 		_execute(argv, command, cmd_count);
@@ -51,7 +50,6 @@ int main(int argc, char *argv[], char *env[])
 	free(lineptr);
 	return (0);
 }
-
 
 /**
  * _execute - executes commands from main function
@@ -78,7 +76,6 @@ void _execute(char *argv[], char **command, int cmd_count)
 		signal(SIGINT, SIG_DFL);
 		/* _which will get full path of command */
 		shcmd = command[0];
-
 		/* handle case of entering abs path for command */
 		if (*command[0] != '/')
 			command[0] = _which(command[0]);
@@ -89,10 +86,12 @@ void _execute(char *argv[], char **command, int cmd_count)
 			{
 				_error(argv, &shcmd, cmd_count);
 				ffree(command);
-				exit(EXIT_SUCCESS);
+				free(shcmd);
+				_exit(1);
 			}
 			ffree(command);
-			exit(1);
+			free(shcmd);
+			_exit(1);
 		}
 	}
 	else
@@ -101,7 +100,6 @@ void _execute(char *argv[], char **command, int cmd_count)
 		ffree(command);
 	}
 }
-
 
 /**
  * exit_handler - handles exit
@@ -121,14 +119,16 @@ void exit_handler(char **prog, char **command, int cmd_count)
 	}
 
 	if (a > 2147483647 || a < 0)
+	{
+		errno = 0;
 		_error(prog, command, cmd_count);
+	}
 	else
 	{
 		ffree(command);
 		exit(a);
 	}
 }
-
 
 /**
  * sigintHandler - handles Ctrl+C
