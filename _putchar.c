@@ -74,5 +74,5 @@ void _error(char **prog, char **av, int cmd_count)
 		_puts(": ");
 		write(STDERR_FILENO, av[1], _strlen(av[1]));
 	}
-	write(STDERR_FILENO, "\n", 1);
+	/* write(STDERR_FILENO, "\n", 1); */
 }
