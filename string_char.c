@@ -34,7 +34,7 @@ char **split_line(char *line)
 {
 	int i = 0;
 	int bufsize;
-	char *separator = " ";
+//	char separator[2] = {" ", "\t"};
 	char *token = NULL;
 	char **words = NULL;
 
@@ -56,13 +56,13 @@ char **split_line(char *line)
 		exit(errno);
 	}
 
-	token = _strdup(strtok(line, separator));
+	token = _strdup(strtok(line, TOK_DELIM));
 
 	while (token)
 	{
 		words[i] = token;
 		i++;
-		token = _strdup(strtok(NULL, separator));
+		token = _strdup(strtok(NULL, TOK_DELIM));
 	}
 	words[i] = NULL;
 	return (words);
