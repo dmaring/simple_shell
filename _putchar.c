@@ -1,7 +1,4 @@
 #include "shell.h"
-#include <errno.h>
-
-extern char **environ;
 
 /**
  * _putchar - writes the character c to stdout
@@ -14,6 +11,7 @@ int _putchar(char c)
 {
 	return (write(1, &c, 1));
 }
+
 
 /**
  * _puts - prints a string
@@ -28,6 +26,7 @@ void _puts(char *s)
 		s++;
 	}
 }
+
 
 /**
  * _env - prints the current environment
@@ -45,9 +44,12 @@ void _env(void)
 	}
 }
 
+
 /**
  * _error - prints error
+ * @prog: name of program
  * @av: argument
+ * @cmd_count: current command count
  */
 void _error(char **prog, char **av, int cmd_count)
 {

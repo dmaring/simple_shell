@@ -5,7 +5,6 @@
  * @s: string to count
  * Return: number of words
  */
-
 int word_count(char *s)
 {
 	int i;
@@ -25,47 +24,50 @@ int word_count(char *s)
 	return (count);
 }
 
+
 /**
  * split_line - tokenizes input string at spaces
  * @line: string to split
  * Return: pointer to array of split strings
  */
-
 char **split_line(char *line)
 {
 	int i = 0;
 	int bufsize;
-	char *separator = " ";
+//	char separator[2] = {" ", "\t"};
 	char *token = NULL;
 	char **words = NULL;
 
 	rm_nl(&line);
+
 	bufsize = word_count(line);
-        words = malloc(sizeof(char *) * (bufsize + 1));
+
+	words = malloc(sizeof(char *) * (bufsize + 1));
 
 	if (!bufsize)
 	{
-		free(words);
+		ffree(words);
 		exit(errno);
 	}
 
 	if (!words)
 	{
-		free(words);
+		ffree(words);
 		exit(errno);
 	}
 
-	token = _strdup(strtok(line, separator));
+	token = _strdup(strtok(line, TOK_DELIM));
 
 	while (token)
 	{
 		words[i] = token;
 		i++;
-		token = _strdup(strtok(NULL, separator));
+		token = _strdup(strtok(NULL, TOK_DELIM));
 	}
 	words[i] = NULL;
 	return (words);
 }
+
 
 /**
  * str_concat - concatenates two strings
@@ -73,7 +75,6 @@ char **split_line(char *line)
  * @s2: string 2
  * Return: NULL on failure, or pointer to newly allocated space in memory
  */
-
 char *str_concat(char *s1, char *s2)
 {
 	unsigned int len1, len2, i, j = 0;
@@ -97,7 +98,6 @@ char *str_concat(char *s1, char *s2)
 	j = len1 + len2 + 1;
 
 	s = (char *)_calloc(j, sizeof(char));
-	/* s = malloc(sizeof(char) * j); */
 	if (s == NULL)
 		return (NULL);
 
@@ -113,12 +113,12 @@ char *str_concat(char *s1, char *s2)
 	return (s);
 }
 
+
 /**
  * _strdup - returns a pointer to a newly allocated space in memory
  * @str: string to copy
  * Return: pointer to allocated space
  */
-
 char *_strdup(char *str)
 {
 	char *result = NULL;
@@ -144,13 +144,13 @@ char *_strdup(char *str)
 	return (result);
 }
 
+
 /**
  * _strstr - locates a substring
  * @haystack: string to check
  * @needle: substring to look for
  * Return: pointer to beginning of located substring, or NULL
  */
-
 char *_strstr(char *haystack, char *needle)
 {
 	while (*haystack)

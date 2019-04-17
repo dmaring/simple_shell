@@ -12,7 +12,15 @@
 #include <sys/wait.h>
 
 #define ILLNUM 227
+#define TOK_DELIM " \t\a"
 
+/**
+ * struct cmd - struct to pass different arguments to different functions
+ * @argc: number of arguments
+ * @argv: commands entered
+ * @av: parsed commands
+ * @cmd_count: current count of commands entered
+ */
 typedef struct cmd
 {
 	int argc;
@@ -21,6 +29,11 @@ typedef struct cmd
 	int cmd_count;
 } cmd;
 
+/**
+ * struct envvar - struct to pass environment information
+ * @varname: name of variable
+ * @next: next in list
+ */
 typedef struct envvar
 {
 	char *varname;
