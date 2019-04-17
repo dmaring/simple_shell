@@ -12,7 +12,6 @@ int _putchar(char c)
 	return (write(1, &c, 1));
 }
 
-
 /**
  * _puts - prints a string
  * @s: string to print
@@ -26,7 +25,6 @@ void _puts(char *s)
 		s++;
 	}
 }
-
 
 /**
  * _env - prints the current environment
@@ -43,7 +41,6 @@ void _env(void)
 		i++;
 	}
 }
-
 
 /**
  * _error - prints error
@@ -76,6 +73,6 @@ void _error(char **prog, char **av, int cmd_count)
 		write(STDERR_FILENO, "Illegal number", 15);
 		_puts(": ");
 		write(STDERR_FILENO, av[1], _strlen(av[1]));
-		write(STDERR_FILENO, "\n", 1);
 	}
+	write(STDERR_FILENO, "\n", 1);
 }
