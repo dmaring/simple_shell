@@ -34,7 +34,6 @@ char **split_line(char *line)
 {
 	int i = 0;
 	int bufsize;
-//	char separator[2] = {" ", "\t"};
 	char *token = NULL;
 	char **words = NULL;
 

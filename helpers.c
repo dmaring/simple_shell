@@ -55,17 +55,13 @@ char *_getenv(char *name)
  */
 char *_which(char *filename)
 {
-	char *path = NULL;
-	char *buf = NULL;
-	char *wd = NULL;
-	char *token = NULL;
-	char *fullpath = NULL;
-	char *fullfilename = NULL;
+	char *path = NULL, *buf = NULL;
+	char *wd = NULL, *token = NULL;
+	char *fullpath = NULL, *fullfilename = NULL;
 	size_t n = 0;
 	struct stat st;
 
 	fullfilename = str_concat("/", filename);
-
 	path = _getenv("PATH");
 
 	if (path[0] == ':')
