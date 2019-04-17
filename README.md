@@ -1,10 +1,10 @@
 # simple_shell
 
-simple_shell is a project to emulate the capabilities of the venerable [Bourne shell](https://en.wikipedia.org/wiki/Bourne_shell). simple_shell aims at replicate its functionality allowing the user to interact with a cli to run executables and scripts, access shell built-ins, and manipulate files.
+simple_shell is a project to emulate the capabilities of the venerable [Bourne shell](https://en.wikipedia.org/wiki/Bourne_shell). simple_shell aims to replicate shell's functionality allowing the user to interact with a cli to run executables and scripts, access shell built-ins, and manipulate files.
 
 ## Getting Started
 
-These instructions will help you get a copy of simple_shell on to your local machine.  It shows how to use simple_shell with examples, as well as its capabilities.
+These instructions will help you get a copy of simple_shell on to your local machine.  They show how to use simple_shell with examples and demonstrate its capabilities.
 
 ### Prerequisites
 
@@ -121,7 +121,7 @@ echo "echo Hello World"
 Execute script
 
 ```
-$ ./myscript.sh
+($) ./myscript.sh
 ```
 
 Output
@@ -134,7 +134,7 @@ Hello World
 Input
 
 ```
-$ echo "echo hello world" | ./simple_shell
+($) echo "echo hello world" | ./simple_shell
 ```
 
 Output
@@ -146,10 +146,10 @@ hello world
 
 ## Authors
 
-* **Thomas Graeff** - *Initial work* - //TODO profile info
-* **Drew Maring** - (https://github.com/dmaring)
+* **Thomas Graeff** - [https://github.com/graefft](https://github.com/graefft)
+* **Drew Maring** - [https://github.com/dmaring](https://github.com/dmaring)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/dmaring/simple_shell/blob/master/AUTHORS) who participated in this project.
 
 
 ## Acknowledgments
