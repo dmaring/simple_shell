@@ -47,7 +47,6 @@ int main(int __attribute__((unused))ac, char *argv[])
 		}
 		exit_status = _execute(argv, command, cmd_count);
 	}
-	free(lineptr);
 	return (0);
 }
 
@@ -62,7 +61,7 @@ int _execute(char *argv[], char **command, int cmd_count)
 {
 	pid_t childpid;
 	int status, exit_status = 0;
-	char *shcmd = NULL;
+	char *shcmd = command[0];
 
 	childpid = fork();
 	if (childpid == -1)
@@ -73,13 +72,10 @@ int _execute(char *argv[], char **command, int cmd_count)
 	if (childpid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		shcmd = command[0];
 		if (*command[0] != '/')
 			command[0] = _which(command[0]);
 		if (command[0] == NULL)
-		{
 			command[0] = shcmd;
-		}
 		else
 			shcmd = NULL;
 		if (execve(command[0], command, NULL) < 0)
@@ -88,17 +84,16 @@ int _execute(char *argv[], char **command, int cmd_count)
 			{
 				_error(argv, &shcmd, cmd_count);
 				ffree(command);
-				free(shcmd);
 				_exit(127);
 			}
 			ffree(command);
-			free(shcmd);
 			_exit(127);
 		}
 	}
 	else
 	{
 		wait(&status);
+		free(shcmd);
 		ffree(command);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
