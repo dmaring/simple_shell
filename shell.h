@@ -55,6 +55,7 @@ char *_getenv(char *name);
 
 double _atoi(char *s);
 int _cd(char *path);
+int _error(char **prog, char **av, int cmd_count);
 int _execute(char *argv[], char **command, int cmd_count);
 int _help(char **args);
 int iscmd(char *filename);
@@ -70,7 +71,6 @@ void free_ptr(char **ptr);
 void _loop(void);
 void _puts(char *s);
 void rm_nl(char **s);
-void _error(char **prog, char **av, int cmd_count);
 void sigintHandler(int signo);
 void exit_handler(char **argv, char **command, int cmd_count, int exit_status);
 void ffree(char **pp);

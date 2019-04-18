@@ -82,7 +82,7 @@ int _execute(char *argv[], char **command, int cmd_count)
 		{
 			if (errno == 2)
 			{
-				_error(argv, &shcmd, cmd_count);
+				exit_status = _error(argv, &shcmd, cmd_count);
 				ffree(command);
 				_exit(127);
 			}
@@ -93,10 +93,10 @@ int _execute(char *argv[], char **command, int cmd_count)
 	else
 	{
 		wait(&status);
-		free(shcmd);
 		ffree(command);
 		if (WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
+			WEXITSTATUS(status);
+		exit_status = WEXITSTATUS(status);
 	}
 	return (exit_status);
 }
@@ -112,17 +112,18 @@ void exit_handler(char **prog, char **command, int cmd_count, int exit_status)
 {
 	long int a = 0;
 
-	a = command[1] ? _atoi(command[1]) : exit_status;
+	a = command[1] ? _atoi(command[1]) : 2;
 	if (command[1] == NULL)
 	{
 		ffree(command);
-		exit(a);
+		exit(exit_status);
 	}
 
 	if (a > 2147483647 || a < 0)
 	{
-		errno = 0;
+		errno = 2;
 		_error(prog, command, cmd_count);
+		ffree(command);
 	}
 	else
 	{
