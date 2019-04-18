@@ -83,6 +83,7 @@ int _error(char **prog, char **av, int cmd_count)
 		write(STDERR_FILENO, ": ", 2);
 		write(STDERR_FILENO, av[1], _strlen(av[1]));
 		write(STDERR_FILENO, "\n", 1);
+		return (2);
 	}
 	return (2);
 }

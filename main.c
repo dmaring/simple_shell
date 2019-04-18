@@ -37,6 +37,7 @@ int main(int __attribute__((unused))ac, char *argv[])
 		if (_strcmp(command[0], "exit") == 0)
 		{
 			exit_handler(argv, command, cmd_count, exit_status);
+			exit_status = 2;
 			continue;
 		}
 		if (_strcmp(command[0], "env") == 0)
@@ -121,7 +122,7 @@ void exit_handler(char **prog, char **command, int cmd_count, int exit_status)
 
 	if (a > 2147483647 || a < 0)
 	{
-		errno = 2;
+		errno = 0;
 		_error(prog, command, cmd_count);
 		ffree(command);
 	}
