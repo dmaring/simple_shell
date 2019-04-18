@@ -61,7 +61,7 @@ char *_which(char *filename)
 	fullfilename = str_concat("/", filename);
 	path = _getenv("PATH");
 
-	if (path[0] == ':')
+	if (path[0] == ':' || (filename[0] == '.' && filename[1] == '/'))
 	{
 		wd = getcwd(buf, n);
 		fullpath = str_concat(wd, fullfilename);
