@@ -23,10 +23,30 @@ Can be invoked by typing ./hsh
 .SH EXAMPLE
 Invocate interactive mode by typing ./hsh in terminal. The prompt will ask for input. By typing 
 .I /bin/ls 
+or
+.I ls
 into the terminal, the contents of the current directory should be displayed.
+This shell can also be used in non-interactive mode by piping commands into it as such:
+.I echo "ls" | ./hsh
+
+.SH EXIT STATUS
+If the shell is in non-interactive mode, the execution of the shell file will be aborted.
+If the shell exits with error, it will be a non-zero exit status. Otherwise it will return the exit status of the last command executed, or an exit status can be appended by the user 
+.I exit (number).
+
+.SH ENVIRONMENT
+.PP 
+.B HOME 
+- Set automatically by login from the user's login directory in the password (passwd(4)) file. 
+.PP
+.B PATH 
+- The default search path for executables.
+.PP
+.B PS1
+- The primary prompt string which defaults to "$ ".
 
 .SH SEE ALSO
-.B man sh (1)
+sh(1)
 
 .SH AUTHORS
 Drew Maring 675@holbertonschool.com
