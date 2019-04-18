@@ -88,9 +88,10 @@ char *_which(char *filename)
 			return (fullpath);
 		}
 		token = strtok(NULL, ":");
+		free(fullpath);
 	}
 	free(fullfilename);
-	return (fullpath);
+	return (NULL);
 }
 
 /**

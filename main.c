@@ -76,6 +76,12 @@ int _execute(char *argv[], char **command, int cmd_count)
 		shcmd = command[0];
 		if (*command[0] != '/')
 			command[0] = _which(command[0]);
+		if (command[0] == NULL)
+		{
+			command[0] = shcmd;
+		}
+		else
+			shcmd = NULL;
 		if (execve(command[0], command, NULL) < 0)
 		{
 			if (errno == 2)
