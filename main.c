@@ -13,7 +13,7 @@ int main(int __attribute__((unused))ac, char *argv[])
 	size_t n = 0;
 	char *lineptr = NULL;
 	char **command = NULL;
-	int gl = 0, cmd_count = 0;
+	int gl = 0, cmd_count = 0, exit_status = 0;
 
 	signal(SIGINT, sigintHandler);
 	while (1)
@@ -36,7 +36,7 @@ int main(int __attribute__((unused))ac, char *argv[])
 		lineptr = NULL;
 		if (_strcmp(command[0], "exit") == 0)
 		{
-			exit_handler(argv, command, cmd_count);
+			exit_handler(argv, command, cmd_count, exit_status);
 			continue;
 		}
 		if (_strcmp(command[0], "env") == 0)
@@ -45,7 +45,7 @@ int main(int __attribute__((unused))ac, char *argv[])
 			ffree(command);
 			continue;
 		}
-		_execute(argv, command, cmd_count);
+		exit_status = _execute(argv, command, cmd_count);
 	}
 	free(lineptr);
 	return (0);
@@ -56,11 +56,12 @@ int main(int __attribute__((unused))ac, char *argv[])
  * @argv: argument from command line
  * @command: parsed command array
  * @cmd_count: count of commands in session
+ * Return: exit status of child
  */
-void _execute(char *argv[], char **command, int cmd_count)
+int _execute(char *argv[], char **command, int cmd_count)
 {
 	pid_t childpid;
-	int status;
+	int status, exit_status = 0;
 	char *shcmd = NULL;
 
 	childpid = fork();
@@ -69,17 +70,12 @@ void _execute(char *argv[], char **command, int cmd_count)
 		perror("Child process failed.");
 		exit(EXIT_FAILURE);
 	}
-	/* child proccess do this */
 	if (childpid == 0)
 	{
-		/* ignore ctrl c SIGINT */
 		signal(SIGINT, SIG_DFL);
-		/* _which will get full path of command */
 		shcmd = command[0];
-		/* handle case of entering abs path for command */
 		if (*command[0] != '/')
 			command[0] = _which(command[0]);
-		/* check for failure of execve */
 		if (execve(command[0], command, NULL) < 0)
 		{
 			if (errno == 2)
@@ -87,18 +83,21 @@ void _execute(char *argv[], char **command, int cmd_count)
 				_error(argv, &shcmd, cmd_count);
 				ffree(command);
 				free(shcmd);
-				_exit(1);
+				_exit(127);
 			}
 			ffree(command);
 			free(shcmd);
-			_exit(1);
+			_exit(127);
 		}
 	}
 	else
 	{
 		wait(&status);
 		ffree(command);
+		if (WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
 	}
+	return (exit_status);
 }
 
 /**
@@ -106,16 +105,17 @@ void _execute(char *argv[], char **command, int cmd_count)
  * @prog: program
  * @command: exit number
  * @cmd_count: current command count
+ * @exit_status: status of last command
  */
-void exit_handler(char **prog, char **command, int cmd_count)
+void exit_handler(char **prog, char **command, int cmd_count, int exit_status)
 {
 	long int a = 0;
 
-	a = command[1] ? _atoi(command[1]) : 0;
+	a = command[1] ? _atoi(command[1]) : exit_status;
 	if (command[1] == NULL)
 	{
 		ffree(command);
-		exit(0);
+		exit(a);
 	}
 
 	if (a > 2147483647 || a < 0)
