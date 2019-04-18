@@ -36,7 +36,7 @@ void _env(void)
 
 	while (environ[i])
 	{
-		write(STDIN_FILENO, environ[i], _strlen(environ[i]));
+		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		_putchar('\n');
 		i++;
 	}
